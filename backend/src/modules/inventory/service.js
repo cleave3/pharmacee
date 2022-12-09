@@ -1,5 +1,5 @@
 const { Inventory } = require("..");
-const { throwError, generateTracking } = require("../../utils");
+const { generateTracking } = require("../../utils");
 const AuthService = require("../auth/service");
 
 class InventoryService {
