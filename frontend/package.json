@@ -4,19 +4,29 @@
   "private": true,
   "dependencies": {
     "@ant-design/icons": "^4.6.2",
+    "@reduxjs/toolkit": "^1.9.1",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
-    "antd": "^4.16.6",
+    "antd": "^4.20.4",
     "apexcharts": "^3.27.1",
     "install": "^0.13.0",
-    "react": "^17.0.2",
+    "react": "^18.1.0",
     "react-apexcharts": "^1.3.9",
-    "react-dom": "^17.0.2",
-    "react-router-dom": "^5.2.0",
-    "react-scripts": "4.0.3",
+    "react-dom": "^18.1.0",
+    "react-idle-timer": "^5.4.2",
+    "react-redux": "^8.0.5",
+    "react-router-dom": "^6.3.0",
+    "react-scripts": "5.0.1",
+    "react-to-print": "^2.14.10",
+    "redux": "^4.2.0",
+    "redux-persist": "^6.0.0",
     "styled-components": "^5.3.0",
+    "typescript": "^4.9.4",
     "web-vitals": "^1.1.2"
+  },
+  "resolutions": {
+    "react-error-overlay": "6.0.9"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -41,5 +51,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "process": "^0.11.10",
+    "react-error-overlay": "6.0.9"
   }
 }

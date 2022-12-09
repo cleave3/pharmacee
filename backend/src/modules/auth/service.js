@@ -36,7 +36,7 @@ class AuthService {
 
         if (!verifyHash(password, user.password)) throwError("invalid login credentials", 403);
 
-        return { token: genToken({ id: user.id }) };
+        return { token: genToken({ id: user.id }), user  };
     }
 
     static async changePassword(id, oldpassword, newpassword) {
