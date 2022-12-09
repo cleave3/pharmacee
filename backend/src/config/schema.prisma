@@ -1,0 +1,78 @@
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+model User {
+    id               String             @id
+    email            String             @unique
+    telephone        String             @unique @db.VarChar(11)
+    firstName        String?
+    lastName         String?
+    password         String
+    passwordType     PASSWORDTYPE       @default(TEMP)
+    role             USERROLE           @default(ADMIN)
+    status           USERSTATUS         @default(ACTIVE)
+    createdAt        DateTime           @default(now())
+    updatedAt        DateTime           @updatedAt
+    Inventory        Inventory[]
+    InventoryHistory InventoryHistory[]
+}
+
+model Inventory {
+    id               Int                @id @default(autoincrement())
+    title            String             @db.VarChar(100)
+    trackingId       String             @db.VarChar(100)
+    status           INVENTORYSTATUS    @default(PENDING)
+    fee              Float              @default(0)
+    senderName       String?            @db.VarChar(50)
+    sendePhone       String?            @db.VarChar(50)
+    senderAddress    String?            @db.VarChar(100)
+    recipientName    String?            @db.VarChar(50)
+    recipientPhone   String?            @db.VarChar(50)
+    recipientAddress String?            @db.VarChar(100)
+    description      String             @db.Text
+    comment          String?            @db.VarChar(255)
+    creator          User?              @relation(fields: [userId], references: [id])
+    userId           String
+    createdAt        DateTime           @default(now())
+    updatedAt        DateTime           @updatedAt
+    InventoryHistory InventoryHistory[]
+}
+
+model InventoryHistory {
+    id          Int             @id @default(autoincrement())
+    inventoryId Int
+    inventory   Inventory?      @relation(fields: [inventoryId], references: [id])
+    initiator   User?           @relation(fields: [userId], references: [id])
+    status      INVENTORYSTATUS @default(PENDING)
+    comment     String
+    userId      String
+    createdAt   DateTime        @default(now())
+}
+
+enum USERROLE {
+    ADMIN
+    SUPERADMIN
+}
+
+enum PASSWORDTYPE {
+    TEMP
+    PERM
+}
+
+enum USERSTATUS {
+    ACTIVE
+    BLOCKED
+}
+
+enum INVENTORYSTATUS {
+    PENDING
+    PROCESSING
+    INTRANSIT
+    DELIVERED
+}
