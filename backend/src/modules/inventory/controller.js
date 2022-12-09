@@ -11,8 +11,17 @@ class InventoryController {
         }
     }
 
+    static async trackItem({ query: { trackingId }}, res) {
+        try {
+            const result = await InventoryService.trackItem(trackingId);
+            return success(res, 200, result);
+        } catch ({ message, code }) {
+            return badRequest(res, code || 500, message);
+        }
+    }
+
     static async getInventory(
-        { query: { page, limit, trackingId, status, userId, title, start, end, otherFilter } = {} },
+        { query: { page, limit, trackingId, status, userId, title, start, end, otherFilter, payment } = {} },
         res
     ) {
         try {
@@ -25,8 +34,18 @@ class InventoryController {
                 title,
                 start,
                 end,
-                otherFilter
+                otherFilter,
+                payment
             );
+            return success(res, 200, result);
+        } catch ({ message, code }) {
+            return badRequest(res, code || 500, message);
+        }
+    }
+
+    static async updateInventory({ body, params: { itemId }, user: { id } }, res) {
+        try {
+            const result = await InventoryService.updateItem(itemId, id, body);
             return success(res, 200, result);
         } catch ({ message, code }) {
             return badRequest(res, code || 500, message);

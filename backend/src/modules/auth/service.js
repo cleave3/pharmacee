@@ -2,6 +2,12 @@ const { User } = require("..");
 const { genHash, genToken, genUUID, throwError, verifyHash } = require("../../utils");
 
 class AuthService {
+    static async getUserRole(id) {
+        const user = await User.findFirst({ where: { id }, select: { role: true } });
+
+        return user?.role;
+    }
+    
     static async getUser(val) {
         const user = await User.findFirst({
             where: { OR: [{ email: val }, { telephone: val }, { id: val }] },

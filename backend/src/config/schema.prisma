@@ -19,8 +19,8 @@ model User {
     status           USERSTATUS         @default(ACTIVE)
     createdAt        DateTime           @default(now())
     updatedAt        DateTime           @updatedAt
-    Inventory        Inventory[]
-    InventoryHistory InventoryHistory[]
+    inventory        Inventory[]
+    inventoryHistory InventoryHistory[]
 }
 
 model Inventory {
@@ -28,6 +28,7 @@ model Inventory {
     title            String             @db.VarChar(100)
     trackingId       String             @db.VarChar(100)
     status           INVENTORYSTATUS    @default(PENDING)
+    payment          PAYMENTSTATUS      @default(PENDING)
     fee              Float              @default(0)
     senderName       String?            @db.VarChar(50)
     sendePhone       String?            @db.VarChar(50)
@@ -41,7 +42,7 @@ model Inventory {
     userId           String
     createdAt        DateTime           @default(now())
     updatedAt        DateTime           @updatedAt
-    InventoryHistory InventoryHistory[]
+    inventoryHistory InventoryHistory[]
 }
 
 model InventoryHistory {
@@ -75,4 +76,9 @@ enum INVENTORYSTATUS {
     PROCESSING
     INTRANSIT
     DELIVERED
+}
+
+enum PAYMENTSTATUS {
+    PENDING
+    PAID
 }
