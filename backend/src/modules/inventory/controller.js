@@ -51,6 +51,15 @@ class InventoryController {
             return badRequest(res, code || 500, message);
         }
     }
+    
+    static async getStats(_, res) {
+        try {
+            const result = await InventoryService.getInventoryStats();
+            return success(res, 200, result);
+        } catch ({ message, code }) {
+            return badRequest(res, code || 500, message);
+        }
+    }
 }
 
 module.exports = InventoryController;

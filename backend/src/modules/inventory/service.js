@@ -76,7 +76,7 @@ class InventoryService {
     }
 
     static async updateItem(itemId, userId, data) {
-        const item = await Inventory.findFirstOrThrow({ where: { id: itemId } });
+        const item = await Inventory.findFirstOrThrow({ where: { id: Number(itemId) } });
 
         const userRole = await AuthService.getUserRole(userId);
         const isSuperAdmin = userRole === "SUPERADMIN";
@@ -91,17 +91,17 @@ class InventoryService {
             recipientPhone: data?.recipientPhone || item?.recipientPhone,
             recipientAddress: data?.recipientAddress || item?.recipientAddress,
             comment: data?.comment || item?.comment,
-            updateComment: data?.updateComment || item?.updateComment,
             status: data?.status || item?.status,
             description: data?.description || item?.description,
+            payment: data?.payment || item?.payment,
         };
 
         const updatedData = await Inventory.update({
-            where: { id: itemId },
+            where: { id: Number(itemId) },
             data: {
                 ...dataToUpdate,
                 inventoryHistory: {
-                    create: [{ status: dataToUpdate.status, userId, comment: dataToUpdate.updateComment }],
+                    create: [{ status: dataToUpdate.status, userId, comment: data?.updateComment || "Record updated" }],
                 },
             },
             include: {
@@ -119,6 +119,32 @@ class InventoryService {
         const item = await Inventory.findFirstOrThrow({ where: { trackingId } });
 
         return item;
+    }
+
+    static async getInventoryStats() {
+        const stats = await Inventory.groupBy({ by: ["status"], _count: { status: true } });
+
+        let resultMap = {    
+            PENDING: "pending",
+            PROCESSING: "processing",
+            INTRANSIT: "intransit",
+            DELIVERED: "delivered"
+        }
+
+        let result = {
+            pending: 0,
+            processing: 0,
+            intransit: 0,
+            delivered: 0
+        };
+
+        for (let i = 0; i < stats.length; i++) {
+            const element = stats[i];
+            let key = resultMap[element.status]
+            result[key] = element._count.status
+        }
+
+        return result;
     }
 }
 

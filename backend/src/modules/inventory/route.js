@@ -9,6 +9,7 @@ const router = Router();
 router.get("/track-package", InventoryController.trackItem);
 router.post("/add", checkAuth(), Validator(inventory), InventoryController.registerInventory);
 router.get("/", checkAuth(), InventoryController.getInventory);
+router.get("/stats", checkAuth(), InventoryController.getStats);
 router.patch("/:itemId", checkAuth(), InventoryController.updateInventory);
 
 module.exports = router;
