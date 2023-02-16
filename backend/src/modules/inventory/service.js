@@ -46,13 +46,13 @@ class InventoryService {
         if (payment) query.payment = { equals: payment };
         if (userId) query.userId = { equals: userId };
         if (title) query.title = { contains: title };
-        if (start || end) query.createdAt = { lte: start, gte: end };
+        if (start) query.createdAt = { gte: new Date(start).toISOString(), lte: new Date(end).toISOString() };
         if (otherFilter)
             query.OR = [
-                { senderName: { contains: otherFilter } },
-                { sendePhone: { contains: otherFilter } },
-                { recipientName: { contains: otherFilter } },
-                { recipientPhone: { contains: otherFilter } },
+                { senderName: { contains: otherFilter, mode: "insensitive" } },
+                { senderPhone: { contains: otherFilter, mode: "insensitive" } },
+                { recipientName: { contains: otherFilter, mode: "insensitive" } },
+                { recipientPhone: { contains: otherFilter, mode: "insensitive" } },
             ];
 
         const total = await Inventory.count({ where: { ...query } });
@@ -116,7 +116,10 @@ class InventoryService {
     }
 
     static async trackItem(trackingId) {
-        const item = await Inventory.findFirstOrThrow({ where: { trackingId } });
+        const item = await Inventory.findFirstOrThrow({
+            where: { trackingId: String(trackingId).toUpperCase() },
+            include: { inventoryHistory: true },
+        });
 
         return item;
     }
@@ -124,24 +127,24 @@ class InventoryService {
     static async getInventoryStats() {
         const stats = await Inventory.groupBy({ by: ["status"], _count: { status: true } });
 
-        let resultMap = {    
+        let resultMap = {
             PENDING: "pending",
             PROCESSING: "processing",
             INTRANSIT: "intransit",
-            DELIVERED: "delivered"
-        }
+            DELIVERED: "delivered",
+        };
 
         let result = {
             pending: 0,
             processing: 0,
             intransit: 0,
-            delivered: 0
+            delivered: 0,
         };
 
         for (let i = 0; i < stats.length; i++) {
             const element = stats[i];
-            let key = resultMap[element.status]
-            result[key] = element._count.status
+            let key = resultMap[element.status];
+            result[key] = element._count.status;
         }
 
         return result;

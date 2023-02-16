@@ -2,23 +2,6 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { notification } from "antd";
 import { httpRequest } from "redux/http";
 import { updateAuth } from ".";
-// import { Auth } from "../../firebase/auth";
-// import { RegisterInput, LoginInput } from "../../firebase/types";
-import { formatError } from "../../utils";
-
-// export const register = createAsyncThunk(
-//     "auth/register",
-//     async (data: RegisterInput, { rejectWithValue }): Promise<any> => {
-//         try {
-//             let result = await Auth.signUpWithEmailAndPassword(data);
-//             notification.success({ placement: "top", message: "Registration Sucessful" });
-//             return result;
-//         } catch (error: any) {
-//             notification.error({ message: "Registration Failed", description: formatError(error.code) });
-//             return rejectWithValue("oops !!! something went wrong, please try again.");
-//         }
-//     }
-// );
 
 export const login = createAsyncThunk(
     "auth/login",
@@ -26,7 +9,7 @@ export const login = createAsyncThunk(
         try {
             const result = await httpRequest({ url: "auth/login", method: "POST", body: data });
             if (!result.status) throw new Error(result.message);
-            
+
             notification.success({ message: "Login Sucessful" });
             sessionStorage.setItem("x-access-token", result.data.token);
 
@@ -41,6 +24,15 @@ export const login = createAsyncThunk(
         }
     }
 );
+
+export const getUsers = createAsyncThunk("auth/users", async (_, { rejectWithValue }): Promise<any> => {
+    try {
+        const result = await httpRequest({ url: "auth/users" });
+        return result.data;
+    } catch ({ message }) {
+        return rejectWithValue("oops !!! something went wrong, please try again.");
+    }
+});
 
 // export const updateProfile = createAsyncThunk(
 //     "auth/updateProfile",

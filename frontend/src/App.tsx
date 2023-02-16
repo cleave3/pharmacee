@@ -1,10 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
-import Tables from "./pages/Tables";
 import Billing from "./pages/Billing";
-import Rtl from "./pages/Rtl";
 import Profile from "./pages/Profile";
-import SignUp from "./pages/SignUp";
 import SignIn from "./pages/SignIn";
 import Main from "./components/layout/Main";
 import "antd/dist/antd.css";
@@ -12,18 +9,19 @@ import "./assets/styles/main.css";
 import "./assets/styles/responsive.css";
 import { PublicRoute, PrivateRoute } from "components/RouteWrapper";
 import NotFound from "components/Notfound";
+import Inventory from "pages/Inventory";
+import Users from "pages/Users";
 
 const publicRoutes = [
     { path: "/", component: <SignIn /> },
-    { path: "/sign-up", component: <SignUp /> },
 ];
 
 const privateRoutes = [
     { path: "/dashboard", component: <Home /> },
-    { path: "/tables", component: <Tables /> },
+    { path: "/inventory", component: <Inventory /> },
+    { path: "/users", component: <Users /> },
+    { path: "/account-settings", component: <Profile /> },
     { path: "/billing", component: <Billing /> },
-    { path: "/rtl", component: <Rtl /> },
-    { path: "/profile", component: <Profile /> },
 ];
 
 const neutralRoutes = [];

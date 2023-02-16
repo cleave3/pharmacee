@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-// import { User } from "../../firebase/users";
-import { login } from "./authThunk";
+import { login, getUsers } from "./authThunk";
 
 export interface User {
     id: string;
@@ -21,6 +20,7 @@ interface AuthState {
     processing: boolean;
     isAuth: boolean;
     user: User | null;
+    users: User[];
 }
 
 const initialState: AuthState = {
@@ -28,6 +28,7 @@ const initialState: AuthState = {
     processing: false,
     isAuth: false,
     user: null,
+    users: [],
 };
 
 const slice = createSlice({
@@ -35,12 +36,12 @@ const slice = createSlice({
     initialState,
     reducers: {
         updateAuth: (state: AuthState, action: PayloadAction<boolean>) => {
-            state.isAuth = action.payload
-        }, 
+            state.isAuth = action.payload;
+        },
         logOut: (state: AuthState) => {
             state.isAuth = false;
-            sessionStorage.clear()
-        }, 
+            sessionStorage.clear();
+        },
     },
     extraReducers(builder) {
         builder
@@ -66,6 +67,17 @@ const slice = createSlice({
             .addCase(login.rejected, state => {
                 state.isLoading = false;
                 state.isAuth = false;
+            })
+            .addCase(getUsers.pending, state => {
+                state.isLoading = true;
+            })
+            .addCase(getUsers.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.users = action.payload;
+            })
+            .addCase(getUsers.rejected, state => {
+                state.isLoading = false;
+                state.users = [];
             });
         // .addCase(socioLogin.pending, (state) => {
         //     state.isAuth = false;
@@ -100,6 +112,6 @@ const slice = createSlice({
 
 const { reducer, actions } = slice;
 
-export const { updateAuth, logOut } = actions
+export const { updateAuth, logOut } = actions;
 
 export default reducer;

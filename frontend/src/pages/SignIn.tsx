@@ -10,13 +10,10 @@ const SignIn = () => {
     const dispatch = useAppDispatch()
 
     const onFinish = values => {
-        console.log('values ', values);
         dispatch(login(values))
     };
 
     const { isLoading } = useAppSelector(state => state.auth)
-
-    console.log('isLoading ', isLoading)
 
     return (
         <>

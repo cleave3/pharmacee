@@ -26,6 +26,8 @@ class AuthService {
 
         const user = await User.create({ data: { ...data, id: genUUID(), password: genHash(data.password) } });
 
+        delete user.password;
+
         return user;
     }
 
@@ -35,6 +37,8 @@ class AuthService {
         if (!user) throwError("invalid login credentials", 403);
 
         if (!verifyHash(password, user.password)) throwError("invalid login credentials", 403);
+
+        delete user.password;
 
         return { token: genToken({ id: user.id }), user  };
     }
@@ -57,6 +61,12 @@ class AuthService {
 
     static async getUsers() {
         const users = await User.findMany();
+
+        for (let index = 0; index < users.length; index++) {
+            const user = users[index];
+            delete user.password;
+            delete user.passwordType
+        }
 
         return users;
     }

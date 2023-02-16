@@ -38,7 +38,7 @@ exports.genHash = password => bcrypt.hashSync(password, 10);
 exports.verifyHash = (password, hash) => bcrypt.compareSync(password, hash);
 
 exports.generateTracking = (prefix = "PH") => {
-    const id = this.genUUID().split("-").reverse().join("").substring(0, 10)
+    const id = this.genUUID().split("-").reverse().join("").substring(0, 10).toUpperCase()
 
     return `${prefix}-${id}`
 }
