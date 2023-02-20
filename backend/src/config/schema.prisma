@@ -31,7 +31,7 @@ model Inventory {
     payment          PAYMENTSTATUS      @default(PENDING)
     fee              Float              @default(0)
     senderName       String?            @db.VarChar(50)
-    senderPhone       String?            @db.VarChar(50)
+    senderPhone      String?            @db.VarChar(50)
     senderAddress    String?            @db.VarChar(100)
     recipientName    String?            @db.VarChar(50)
     recipientPhone   String?            @db.VarChar(50)

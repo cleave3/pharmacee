@@ -3,13 +3,22 @@ import { PlusOutlined } from "@ant-design/icons";
 import TableFilters from "./Filters";
 import ItemDetail from "./ItemDetail";
 import InventoryTable from "./Table";
+import { useAppDispatch } from "redux/hooks";
+import { toggleForm } from "redux/inventory";
+import ItemForm from "./ItemForm";
 
 const Inventory = () => {
+    const dispatch = useAppDispatch();
+
     return (
         <>
             <div className="tabled">
                 <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "10px" }}>
-                    <Button icon={<PlusOutlined />} type="primary">
+                    <Button
+                        icon={<PlusOutlined />}
+                        type="primary"
+                        onClick={() => dispatch(toggleForm({ visible: true }))}
+                    >
                         Register New Item
                     </Button>
                 </div>
@@ -29,6 +38,7 @@ const Inventory = () => {
                 </Row>
             </div>
             <ItemDetail />
+            <ItemForm />
         </>
     );
 };

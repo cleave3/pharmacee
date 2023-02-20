@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { User } from "../auth";
-import { getInventory } from "./inventoryThunk";
+import { getInventory, saveItem } from "./inventoryThunk";
 
 export type InventoryPayload = {
     title: string;
@@ -66,7 +66,7 @@ export interface InventoryState {
     };
     inventory: Inventory[];
     selected?: Inventory;
-    formState: InventoryPayload;
+    showForm: boolean;
 }
 
 const initialState: InventoryState = {
@@ -90,18 +90,7 @@ const initialState: InventoryState = {
     },
     inventory: [],
     selected: null,
-    formState: {
-        title: "",
-        fee: 0,
-        senderName: "",
-        senderPhone: "",
-        senderAddress: "",
-        recipientName: "",
-        recipientPhone: "",
-        recipientAddress: "",
-        description: "",
-        comment: "",
-    },
+    showForm: false,
 };
 
 const slice = createSlice({
@@ -117,11 +106,8 @@ const slice = createSlice({
         selectInventory: (state, action: PayloadAction<InventoryState["selected"]>) => {
             state.selected = action.payload;
         },
-        setFormState: (state, action: PayloadAction<Record<keyof InventoryState["formState"], any>>) => {
-            state.formState = action.payload;
-        },
-        resetFormState: state => {
-            state.formState = initialState.formState;
+        toggleForm: (state, action: PayloadAction<{ visible: boolean }>) => {
+            state.showForm = action.payload.visible;
         },
     },
     extraReducers(builder) {
@@ -146,12 +132,24 @@ const slice = createSlice({
             .addCase(getInventory.rejected, state => {
                 state.isLoading = false;
                 state.inventory = [];
+            })
+            .addCase(saveItem.pending, state => {
+                state.isProcessing = true;
+            })
+            .addCase(saveItem.fulfilled, (state, action: PayloadAction<Inventory>) => {
+                state.isProcessing = false;
+                state.total += 1;
+                state.inventory = [action.payload, ...state.inventory];
+                state.showForm = false;
+            })
+            .addCase(saveItem.rejected, state => {
+                state.isProcessing = false;
             });
     },
 });
 
 const { reducer, actions } = slice;
 
-export const { setFilter, selectInventory, setFormState, resetFilter, resetFormState } = actions;
+export const { setFilter, selectInventory, resetFilter, toggleForm } = actions;
 
 export default reducer;

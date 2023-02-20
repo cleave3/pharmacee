@@ -19,6 +19,12 @@ body {
     font-weight: 400;
     font-family: open sans, Helvetica, Arial, sans-serif;
 }
+
+.ql-container.ql-snow,
+.ql-editor.ql-blank {
+    min-height: 200px;
+}
+
 .ant-layout.ant-layout-has-sider {
     flex-direction: row;
 }
@@ -1373,6 +1379,7 @@ ul.ant-menu.ant-menu-root.ant-menu-inline.ant-menu-light.left-nav li:active {
 .rightside-top .ant-input {
     height: 30px;
 }
+
 .aside-footer {
     padding-top: 100px;
 }
@@ -1782,15 +1789,26 @@ body {
 .text-muted {
     color: #8c8c8c;
 }
-.ant-input {
-    border-radius: 6px;
+.ant-input,
+.ant-input-number,
+.form-select .ant-select-selector {
+    border-radius: 6px !important;
 }
 .ant-input {
     font-weight: 600;
     color: #8c8c8c;
 }
-.ant-input {
-    height: 40px;
+
+.ant-input-number,
+.form-select .ant-select-selector {
+    width: 100% !important;
+    padding: 4px 5px !important;
+}
+
+.ant-input,
+.ant-input-number,
+.form-select .ant-select-selector {
+    height: 40px !important;
     border: 1px solid #d9d9d9;
 }
 .font-bold {
