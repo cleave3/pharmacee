@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { login, getUsers } from "./authThunk";
+import { login, getUsers, changePassword } from "./authThunk";
 
 export interface User {
     id: string;
@@ -78,35 +78,35 @@ const slice = createSlice({
             .addCase(getUsers.rejected, state => {
                 state.isLoading = false;
                 state.users = [];
+            })
+            // .addCase(socioLogin.pending, (state) => {
+            //     state.isAuth = false;
+            //     state.isLoading = true;
+            // })
+            // .addCase(socioLogin.fulfilled, (state, action) => {
+            //     state.isAuth = true;
+            //     state.user = action.payload;
+            //     state.isLoading = false;
+            // })
+            // .addCase(socioLogin.rejected, (state) => {
+            //     state.isAuth = false;
+            //     state.isLoading = false;
+            // })
+            // .addCase(logOut.fulfilled, state => {
+            //     state.isAuth = false;
+            //     state.user = null;
+            //     state.processing = false;
+            // })
+            .addCase(changePassword.pending, state => {
+                state.processing = true;
+            })
+            .addCase(changePassword.fulfilled, state => {
+                state.processing = false;
+                state.user = { ...state.user, passwordType: "PERM" };
+            })
+            .addCase(changePassword.rejected, state => {
+                state.processing = false;
             });
-        // .addCase(socioLogin.pending, (state) => {
-        //     state.isAuth = false;
-        //     state.isLoading = true;
-        // })
-        // .addCase(socioLogin.fulfilled, (state, action) => {
-        //     state.isAuth = true;
-        //     state.user = action.payload;
-        //     state.isLoading = false;
-        // })
-        // .addCase(socioLogin.rejected, (state) => {
-        //     state.isAuth = false;
-        //     state.isLoading = false;
-        // })
-        // .addCase(logOut.fulfilled, state => {
-        //     state.isAuth = false;
-        //     state.user = null;
-        //     state.processing = false;
-        // })
-        // .addCase(updateProfile.pending, state => {
-        //     state.processing = true;
-        // })
-        // .addCase(updateProfile.fulfilled, (state, action) => {
-        //     state.processing = false;
-        //     state.user = { ...state.user, ...action.payload };
-        // })
-        // .addCase(updateProfile.rejected, state => {
-        //     state.processing = false;
-        // });
     },
 });
 

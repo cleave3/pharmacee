@@ -1,6 +1,6 @@
 const { throwError } = require("../../utils");
 
-exports.register = ({ body: { firstName, lastName, email, telephone, userName, password } }) => {
+exports.register = ({ body: { firstName, lastName, email, telephone, password } }) => {
     if (!firstName) throwError("firstName is required");
     if (firstName.length < 3) throwError("firstName must be atleast 3 characters");
     if (!lastName) throwError("lastName is required");

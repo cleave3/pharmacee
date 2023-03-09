@@ -25,6 +25,32 @@ export const login = createAsyncThunk(
     }
 );
 
+type ChangePasswordPayload = {
+    data: { oldpassword: string; newpassword: string };
+    successFuc: () => void;
+};
+
+export const changePassword = createAsyncThunk(
+    "auth/changePassword",
+    async ({ data, successFuc }: ChangePasswordPayload, { rejectWithValue }): Promise<any> => {
+        try {
+            const result = await httpRequest({ url: "auth/change-password", method: "PATCH", body: data });
+            if (!result.status) throw new Error(result.message);
+
+            notification.success({ message: "Password Changed Successfully" });
+
+            successFuc();
+
+            console.log('result ', result);
+
+            return result;
+        } catch ({ message }) {
+            notification.error({ message: "Operation Failed", description: message });
+            return rejectWithValue("oops !!! something went wrong, please try again.");
+        }
+    }
+);
+
 export const getUsers = createAsyncThunk("auth/users", async (_, { rejectWithValue }): Promise<any> => {
     try {
         const result = await httpRequest({ url: "auth/users" });
